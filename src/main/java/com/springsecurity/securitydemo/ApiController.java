@@ -16,6 +16,7 @@ public class ApiController {
     public String hello() {
         return "Hello World";
     }
+
     @PreAuthorize("hasRole('ADMIN')") // used to check the authorization
     @GetMapping(path = "/admin")
     public String admin() {
