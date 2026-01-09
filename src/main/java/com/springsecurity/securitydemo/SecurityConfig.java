@@ -12,6 +12,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -57,13 +59,15 @@ public class SecurityConfig {
         // this gives the user details objects
         UserDetails user1 = User.withUsername("user1")
                 // prefix {noop} password save as plain text not coded
-                .password("{noop}pass1")
+//                .password("{noop}pass1")
+                .password(passwordEncoder().encode("pass1"))
                 .roles("USER")
                 .build();
 
         UserDetails admin = User.withUsername("admin")
                 // use of {noop} is a bad practice but in production we use of encrypted one
-                .password("{noop}admin")
+//                .password("{noop}admin")
+                .password(passwordEncoder().encode("admin"))
                 .roles("ADMIN")
                 .build();
 
@@ -76,6 +80,13 @@ public class SecurityConfig {
 
         // InMemoryUserDetailsManager is used to store the users details in memory / locally
 //        return new InMemoryUserDetailsManager(user1,admin);
+    }
+
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return  new BCryptPasswordEncoder();
+
     }
 
 }
